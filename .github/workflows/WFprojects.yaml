@@ -52,7 +52,7 @@ env:
   # ----------------- apps/handles for github actions (ignore for now) ----------------- #
 
   andymckay: andymckay/labeler@master # quick copy-pasta: ${{ env.andymckay }}
-  leonsteinhaeuser: leonsteinhaeuser/project-beta-automations@v1.2.1 # quick copy-pasta: ${{ env.leonsteinhaeuser }}
+  leonsteinhaeuser: leonsteinhaeuser/project-beta-automations@v2.0.1 # quick copy-pasta: ${{ env.leonsteinhaeuser }}
 
 #==================================================================#
 
@@ -71,7 +71,7 @@ jobs:
           echo "The id of this action is: $GITHUB_ACTION"
           echo "Issue is assigned to ${{ env.backlog }} status value inside the projects board"
       - name: Trying out if this works
-        uses: leonsteinhaeuser/project-beta-automations@v1.2.1
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           gh_token: ${{ secrets.USE_THIS}}
           user: ${{ env.username }}
@@ -131,7 +131,7 @@ jobs:
           echo "The id of this action is: $GITHUB_ACTION"
           echo "Issue is assigned to ${{ env.done }} status value inside the projects board"
       - name: If closed, moves the issue to done field in the projects beta board. # step 1
-        uses: leonsteinhaeuser/project-beta-automations@v1.2.1
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           gh_token: ${{ secrets.USE_THIS}}
           user: ${{ env.username }}
@@ -162,7 +162,7 @@ jobs:
     steps:
       - name: In Progress # condition 1
         if: github.event.label.name == 'In Progress'
-        uses: leonsteinhaeuser/project-beta-automations@v1.2.1
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           gh_token: ${{ secrets.USE_THIS }}
           user: ${{ env.username }}
@@ -173,7 +173,7 @@ jobs:
       
       - name: Review requested # condition 2
         if: github.event.label.name == 'Ready for Review' # label with name: status/review-requested
-        uses: leonsteinhaeuser/project-beta-automations@v1.2.1
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           gh_token: ${{ secrets.USE_THIS }}
           user: ${{ env.username }}
@@ -184,7 +184,7 @@ jobs:
 
       - name: Done # condition 3
         if: github.event.label.name == '${{ env.done }}' # label with name: status/done
-        uses: leonsteinhaeuser/project-beta-automations@v1.2.1
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           gh_token: ${{ secrets.USE_THIS }}
           user: ${{ env.username }}
@@ -200,7 +200,7 @@ jobs:
     steps:
       - name: Unlabeled # condition 1
         if: github.event.label.name == 'Unlabeled'
-        uses: leonsteinhaeuser/project-beta-automations@v1.2.1
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           gh_token: ${{ secrets.USE_THIS }}
           user: ${{ env.username }}
