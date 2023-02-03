@@ -41,9 +41,11 @@ env:
   # ----------------- user/org related settings ----------------- #
 
   # username: 
-  gh_project_token: ${{ secrets.USE_THIS }}
+  # gh_project_token: ${{ secrets.USE_THIS }}
   organization_name: VirittamoHelsinki
-  ## github_app
+  gh_app_secret_key: ${{ secrets.USE_THIS }}
+  github_app_ID: ${{ secrets.APP_ID }}
+  gh_app_installation_ID: ${{ secrets.APP_INSTALLATION_ID }}
   project_number: 17
   ## project_portfolio_number: # add here projects beta number that corresponds to project management portfolio for team leader or project manager to follow
 
