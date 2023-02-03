@@ -43,9 +43,9 @@ env:
   # username: 
   # gh_project_token: ${{ secrets.USE_THIS }}
   organization_name: VirittamoHelsinki
-  gh_app_secret_key: ${{ secrets.USE_THIS }}
-  github_app_ID: ${{ secrets.APP_ID }}
-  gh_app_installation_ID: ${{ secrets.APP_INSTALLATION_ID }}
+  gh_app_key: ${{ secrets.APP_SECRET_KEY }}
+  gh_app_id: ${{ secrets.APP_ID }}
+  gh_app_installation_id: ${{ secrets.APP_INSTALLATION_ID }}
   project_number: 17
   ## project_portfolio_number: # add here projects beta number that corresponds to project management portfolio for team leader or project manager to follow
 
@@ -73,9 +73,12 @@ jobs:
       - name: Trying out if this works
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          gh_token: ${{ secrets.USE_THIS}}
-          user: ${{ env.username }}
-          ## organizaton: ${{ env.organization_name }}
+          # gh_token: ${{ secrets.USE_THIS }}
+          # user: ${{ env.username }}
+          gh_app_secret_key: ${{ env.gh_app_key }}
+          gh_app_ID: ${{ env.gh_app_id }}
+          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          organizaton: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           # add-labels: 
           resource_node_id: ${{ github.event.issue.node_id }}
@@ -84,9 +87,12 @@ jobs:
       - name: If unlabeled, adds {{ env.unlabeled }} label # step 2
         uses: andymckay/labeler@master
         with:
-          gh_token: ${{ secrets.USE_THIS }}
-          user: ${{ env.username }}
-          ## organizaton: ${{ env.organization_name }}
+          # gh_token: ${{ secrets.USE_THIS }}
+          # user: ${{ env.username }}
+          gh_app_secret_key: ${{ env.gh_app_key }}
+          gh_app_ID: ${{ env.gh_app_id }}
+          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          organizaton: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.un_labeled }}
@@ -96,9 +102,12 @@ jobs:
       - name: If unassigned, adds {{ env.unassigned }} label # step 3
         uses: andymckay/labeler@master
         with:
-          gh_token: ${{ secrets.USE_THIS }}
-          user: ${{ env.username }}
-          ## organizaton: ${{ env.organization_name }}
+          # gh_token: ${{ secrets.USE_THIS }}
+          # user: ${{ env.username }}
+          gh_app_secret_key: ${{ env.gh_app_key }}
+          gh_app_ID: ${{ env.gh_app_id }}
+          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          organizaton: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.un_assigned }}
@@ -108,9 +117,12 @@ jobs:
       - name: If an issue is reopened, adds ${{ env.backlog }} and removes ${{ env.done }} labels # step 4
         uses: andymckay/labeler@master
         with:
-          gh_token: ${{ secrets.USE_THIS }}
-          user: ${{ env.username }}
-          ## organization: ${{ env.organization_name }}
+          # gh_token: ${{ secrets.USE_THIS }}
+          # user: ${{ env.username }}
+          gh_app_secret_key: ${{ env.gh_app_key }}
+          gh_app_ID: ${{ env.gh_app_id }}
+          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          organizaton: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.backlog }}
@@ -133,9 +145,12 @@ jobs:
       - name: If closed, moves the issue to done field in the projects beta board. # step 1
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          gh_token: ${{ secrets.USE_THIS}}
-          user: ${{ env.username }}
-          ## organizaton: ${{ env.organization_name }}
+          # gh_token: ${{ secrets.USE_THIS}}
+          # user: ${{ env.username }}
+          gh_app_secret_key: ${{ env.gh_app_key }}
+          gh_app_ID: ${{ env.gh_app_id }}
+          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          organizaton: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.done }}
@@ -143,9 +158,12 @@ jobs:
       - name: Adds "done" label to a closed issue # step 2
         uses: andymckay/labeler@master
         with:
-          gh_token: ${{ secrets.USE_THIS }}
-          user: ${{ env.username }}
-          ## organizaton: ${{ env.organization_name }}
+          # gh_token: ${{ secrets.USE_THIS }}
+          # user: ${{ env.username }}
+          gh_app_secret_key: ${{ env.gh_app_key }}
+          gh_app_ID: ${{ env.gh_app_id }}
+          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          organizaton: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.done }}
@@ -164,9 +182,12 @@ jobs:
         if: github.event.label.name == 'In Progress'
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          gh_token: ${{ secrets.USE_THIS }}
-          user: ${{ env.username }}
-          ## organizaton: ${{ env.organization_name }}
+          # gh_token: ${{ secrets.USE_THIS }}
+          # user: ${{ env.username }}
+          gh_app_secret_key: ${{ env.gh_app_key }}
+          gh_app_ID: ${{ env.gh_app_id }}
+          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          organizaton: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.in_progress }}
@@ -175,9 +196,12 @@ jobs:
         if: github.event.label.name == 'Ready for Review' # label with name: status/review-requested
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          gh_token: ${{ secrets.USE_THIS }}
-          user: ${{ env.username }}
-          ## organizaton: ${{ env.organization_name }}
+          # gh_token: ${{ secrets.USE_THIS }}
+          # user: ${{ env.username }}
+          gh_app_secret_key: ${{ env.gh_app_key }}
+          gh_app_ID: ${{ env.gh_app_id }}
+          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          organizaton: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.ready_for_review }}
@@ -186,9 +210,12 @@ jobs:
         if: github.event.label.name == '${{ env.done }}' # label with name: status/done
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          gh_token: ${{ secrets.USE_THIS }}
-          user: ${{ env.username }}
-          ## organizaton: ${{ env.organization_name }}
+          # gh_token: ${{ secrets.USE_THIS }}
+          # user: ${{ env.username }}
+          gh_app_secret_key: ${{ env.gh_app_key }}
+          gh_app_ID: ${{ env.gh_app_id }}
+          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          organizaton: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.done }}
@@ -202,9 +229,12 @@ jobs:
         if: github.event.label.name == 'Unlabeled'
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          gh_token: ${{ secrets.USE_THIS }}
-          user: ${{ env.username }}
-          ## organizaton: ${{ env.organization_name }}
+          # gh_token: ${{ secrets.USE_THIS }}
+          # user: ${{ env.username }}
+          gh_app_secret_key: ${{ env.gh_app_key }}
+          gh_app_ID: ${{ env.gh_app_id }}
+          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          organizaton: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.un_labeled }}
