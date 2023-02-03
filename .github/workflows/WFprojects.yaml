@@ -78,7 +78,7 @@ jobs:
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organizaton: ${{ env.organization_name }}
+          organization: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           # add-labels: 
           resource_node_id: ${{ github.event.issue.node_id }}
@@ -92,7 +92,7 @@ jobs:
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organizaton: ${{ env.organization_name }}
+          organization: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.un_labeled }}
@@ -107,7 +107,7 @@ jobs:
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organizaton: ${{ env.organization_name }}
+          organization: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.un_assigned }}
@@ -122,7 +122,7 @@ jobs:
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organizaton: ${{ env.organization_name }}
+          organization: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.backlog }}
@@ -150,7 +150,7 @@ jobs:
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organizaton: ${{ env.organization_name }}
+          organization: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.done }}
@@ -163,7 +163,7 @@ jobs:
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organizaton: ${{ env.organization_name }}
+          organization: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.done }}
@@ -187,7 +187,7 @@ jobs:
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organizaton: ${{ env.organization_name }}
+          organization: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.in_progress }}
@@ -201,7 +201,7 @@ jobs:
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organizaton: ${{ env.organization_name }}
+          organization: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.ready_for_review }}
@@ -215,7 +215,7 @@ jobs:
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organizaton: ${{ env.organization_name }}
+          organization: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.done }}
@@ -234,7 +234,7 @@ jobs:
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organizaton: ${{ env.organization_name }}
+          organization: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.un_labeled }}
