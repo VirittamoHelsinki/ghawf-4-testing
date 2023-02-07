@@ -3,6 +3,8 @@ name: Frontend card template
 description: Use this when opening a frontend-related issue or feature.
 title: "[Frontend]: "
 labels: [Frontend]
+# ----------- optional setting ----------- #
+# ----------- automatically assigns someone each time an issue is created ----------- #
 # assignees:
 #    - <insert assignee(s) here>
 
