@@ -9,12 +9,12 @@ Make sure to add one of the three labls - Design, Frontend, or Backend - in squa
 # Summary (Required)
 Please provide a detailed description of your pull request, explaining what it solves and how.
 
-# Reference issues
+# Reference issues (Required)
 Include the relevant issue(s) ID(s) here with a hashtag (#) followed by the number. For example #1.
 
-# Checklist
+# Checklist (Required)
 Please make sure to review the following checklist before submitting your pull request:
-- [ ] I have read [Git Etiquette](https://github.com/LeDuble/Git-Etiquette)
+- [ ] I have read [Git Etiquette](https://github.com/LeDuble/Git-Etiquette) (Required)
 - [ ] I agree to follow the [Code of Conduct](). (Required)
 - [ ] Documented (Required)
 - [ ] Tested (Optional)
