@@ -2,7 +2,7 @@
 name: Frontend card template
 description: Use this when opening a frontend-related issue or feature.
 title: "[Frontend]: "
-labels: [Frontend 🖥️]
+labels: [Frontend]
 # assignees:
 #    - <insert assignee(s) here>
 
