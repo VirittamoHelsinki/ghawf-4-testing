@@ -174,7 +174,7 @@ jobs:
     if: ${{ github.event_name == 'issues' && github.event.action == 'labeled' }}
     steps:
       - name: In Progress # condition 1
-        if: ${{ github.event.label.name == '${{ env.in_progress }}' # label with name: status/in-progress
+        if: ${{ github.event.label.name == '${{ env.in_progress }}' }} # label with name: status/in-progress
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           # gh_token: ${{ env.gh_project_token }}
@@ -188,7 +188,7 @@ jobs:
           status_value: ${{ env.in_progress }}
       
       - name: Review Requested # condition 2
-        if: ${{ github.event.label.name == '${{ env.ready_for_review }}' # label with name: status/review-requested
+        if: ${{ github.event.label.name == '${{ env.ready_for_review }}' }} # label with name: status/review-requested
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           # gh_token: ${{ env.gh_project_token }}
@@ -202,7 +202,7 @@ jobs:
           status_value: ${{ env.ready_for_review }}
 
       - name: Done # condition 3
-        if: ${{ github.event.label.name == '${{ env.done }}' # label with name: status/done
+        if: ${{ github.event.label.name == '${{ env.done }}' }} # label with name: status/done
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           # gh_token: ${{ env.gh_project_token }}
