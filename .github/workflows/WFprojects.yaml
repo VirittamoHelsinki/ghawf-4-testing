@@ -1,11 +1,9 @@
 #================================= project name & types =================================#
 name: issues workflow
-run-name: ${{ github.actor }} has ignited github actions ${{ github.event }}
+run-name: ${{ github.actor }} has ignited issues workflow
 on:
   issues:
     types: [opened, closed, labeled, unlabeled, assigned, unassigned]
-  pull_request:
-    types: [opened, closed, labeled, unlabeled, assigned, unassigned, review_requested, review_request_removed]
 
 #========================================================================#
 
@@ -61,19 +59,13 @@ env:
 jobs:
   issue_opened: # issue opened
     name: issue_opened_or_reopened
-    runs-on: Ubuntu-20.04
-    if: github.event_name == 'issues' && github.event.action == 'opened'
+    if: ${{ github.event_name == 'issues' && github.event.action == 'opened' }}
+    runs-on: ubuntu-latest
     steps:
-      - name: Move issue to ${{ env.backlog }} # step 1 # change name to print
-
-        run: |
-          echo "The id of this job is: $GITHUB_JOB"
-          echo "The id of this action is: $GITHUB_ACTION"
-          echo "Issue is assigned to ${{ env.backlog }} status value inside the projects board"
-      - name: Trying out if this works
+      - name: Move issue to ${{ env.backlog }} # step 1 
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          # gh_token: ${{ secrets.USE_THIS }}
+          # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
@@ -83,11 +75,12 @@ jobs:
           # add-labels: 
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.backlog }}
-
+          
       - name: If unlabeled, adds {{ env.unlabeled }} label # step 2
         uses: andymckay/labeler@master
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          # gh_token: ${{ secrets.USE_THIS }}
+          # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
@@ -101,8 +94,9 @@ jobs:
 
       - name: If unassigned, adds {{ env.unassigned }} label # step 3
         uses: andymckay/labeler@master
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          # gh_token: ${{ secrets.USE_THIS }}
+          # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
@@ -116,8 +110,9 @@ jobs:
 
       - name: If an issue is reopened, adds ${{ env.backlog }} and removes ${{ env.done }} labels # step 4
         uses: andymckay/labeler@master
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          # gh_token: ${{ secrets.USE_THIS }}
+          # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
@@ -131,10 +126,11 @@ jobs:
 #------------------------------------------------------------------#
 
 #--------------------------------- ISSUE is CLOSED ---------------------------------#
+
   issue_closed: # issue closed
     name: issue_closed
-    runs-on: Ubuntu-20.04
-    if: github.event_name == 'issues' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'issues' && github.event.action == 'closed' }}
     steps:
       - name: Move issue to ${{ env.done }} # change name to print
 
@@ -142,7 +138,8 @@ jobs:
           echo "The id of this job is: $GITHUB_JOB"
           echo "The id of this action is: $GITHUB_ACTION"
           echo "Issue is assigned to ${{ env.done }} status value inside the projects board"
-      - name: If closed, moves the issue to done field in the projects beta board. # step 1
+
+      - name: If closed, moves the issue to done field in the projects board. # step 1
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           # gh_token: ${{ secrets.USE_THIS}}
@@ -158,7 +155,7 @@ jobs:
       - name: Adds "done" label to a closed issue # step 2
         uses: andymckay/labeler@master
         with:
-          # gh_token: ${{ secrets.USE_THIS }}
+          # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
@@ -173,16 +170,17 @@ jobs:
 #------------------------------------------------------------------#
 
 #--------------------------------- when ISSUE is LABELED ---------------------------------#
+
   # If an issue will be given label x -> then put it in the 
   issues_labeled:
-    runs-on: Ubuntu-20.04
-    if: github.event_name == 'issues' && github.event.action == 'labeled'
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'issues' && github.event.action == 'labeled' }}
     steps:
       - name: In Progress # condition 1
-        if: github.event.label.name == 'In Progress'
+        if: ${{ github.event.label.name == '${{ env.in_progress }}' # label with name: status/in-progress
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          # gh_token: ${{ secrets.USE_THIS }}
+          # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
@@ -192,11 +190,11 @@ jobs:
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.in_progress }}
       
-      - name: Review requested # condition 2
-        if: github.event.label.name == 'Ready for Review' # label with name: status/review-requested
+      - name: Review Requested # condition 2
+        if: ${{ github.event.label.name == '${{ env.ready_for_review }}' # label with name: status/review-requested
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          # gh_token: ${{ secrets.USE_THIS }}
+          # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
@@ -207,10 +205,10 @@ jobs:
           status_value: ${{ env.ready_for_review }}
 
       - name: Done # condition 3
-        if: github.event.label.name == '${{ env.done }}' # label with name: status/done
+        if: ${{ github.event.label.name == '${{ env.done }}' # label with name: status/done
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          # gh_token: ${{ secrets.USE_THIS }}
+          # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
@@ -220,16 +218,17 @@ jobs:
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.done }}
 
-# ----------------- when issue is unlabeled ----------------- #
+# #--------------------------------- when ISSUE is UNLABELED ---------------------------------#
+
   issues_unlabeled:
-    runs-on: Ubuntu-20.04
-    if: github.event_name == 'issues' && github.event.action == 'Unlabeled'
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'issues' && github.event.action == 'unlabeled'
     steps:
-      - name: Unlabeled # condition 1
-        if: github.event.label.name == 'Unlabeled'
+      - name: unlabeled # condition 1
+        if: ${{ github.event.label.name == 'unlabeled' }}
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          # gh_token: ${{ secrets.USE_THIS }}
+          # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
@@ -239,4 +238,4 @@ jobs:
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.un_labeled }}
 
-#------------------------------------------------------------------#
+# #------------------------------------------------------------------#
