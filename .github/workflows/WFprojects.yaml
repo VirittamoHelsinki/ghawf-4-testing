@@ -1,6 +1,6 @@
 #================================= project name & types =================================#
 name: issues workflow
-run-name: ${{ github.actor }} has ignited issues workflow
+run-name: ${{ github.actor }} has ignited ${{ github.workflow }}
 on:
   issues:
     types: [opened, closed, labeled, unlabeled, assigned, unassigned]
@@ -219,7 +219,7 @@ jobs:
 
   issues_unlabeled:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'issues' && github.event.action == 'unlabeled'
+    if: ${{ github.event_name == 'issues' && github.event.action == 'unlabeled' }}
     steps:
       - name: unlabeled # condition 1
         if: ${{ github.event.label.name == 'unlabeled' }}
