@@ -4,8 +4,6 @@ run-name: ${{ github.actor }} has ignited issues workflow
 on:
   issues:
     types: [opened, closed, labeled, unlabeled, assigned, unassigned]
-  pull_request:
-    types: [opened, closed, labeled, unlabeled, assigned, unassigned, review_requested, review_request_removed]
 
 #========================================================================#
 
@@ -61,8 +59,8 @@ env:
 jobs:
   issue_opened: # issue opened
     name: issue_opened_or_reopened
-    if: github.event_name == 'issues' && github.event.action == 'opened'
-    runs-on: Ubuntu-20.04
+    if: ${{ github.event_name == 'issues' && github.event.action == 'opened' }}
+    runs-on: ubuntu-latest
     steps:
       - name: Move issue to ${{ env.backlog }} # step 1 
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
@@ -77,6 +75,7 @@ jobs:
           # add-labels: 
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.backlog }}
+          
       - name: If unlabeled, adds {{ env.unlabeled }} label # step 2
         uses: andymckay/labeler@master
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
@@ -130,8 +129,8 @@ jobs:
 
   issue_closed: # issue closed
     name: issue_closed
-    runs-on: Ubuntu-20.04
-    if: github.event_name == 'issues' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'issues' && github.event.action == 'closed' }}
     steps:
       - name: Move issue to ${{ env.done }} # change name to print
 
@@ -174,11 +173,11 @@ jobs:
 
   # If an issue will be given label x -> then put it in the 
   issues_labeled:
-    runs-on: Ubuntu-20.04
-    if: github.event_name == 'issues' && github.event.action == 'labeled'
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'issues' && github.event.action == 'labeled' }}
     steps:
       - name: In Progress # condition 1
-        if: github.event.label.name == '${{ env.in_progress }}' # label with name: status/in-progress
+        if: ${{ github.event.label.name == '${{ env.in_progress }}' # label with name: status/in-progress
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           # gh_token: ${{ env.gh_project_token }}
@@ -192,7 +191,7 @@ jobs:
           status_value: ${{ env.in_progress }}
       
       - name: Review Requested # condition 2
-        if: github.event.label.name == '${{ env.ready_for_review }}' # label with name: status/review-requested
+        if: ${{ github.event.label.name == '${{ env.ready_for_review }}' # label with name: status/review-requested
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           # gh_token: ${{ env.gh_project_token }}
@@ -206,7 +205,7 @@ jobs:
           status_value: ${{ env.ready_for_review }}
 
       - name: Done # condition 3
-        if: github.event.label.name == '${{ env.done }}' # label with name: status/done
+        if: ${{ github.event.label.name == '${{ env.done }}' # label with name: status/done
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           # gh_token: ${{ env.gh_project_token }}
@@ -219,14 +218,14 @@ jobs:
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.done }}
 
-#--------------------------------- when ISSUE is UNLABELED ---------------------------------#
+# #--------------------------------- when ISSUE is UNLABELED ---------------------------------#
 
   issues_unlabeled:
-    runs-on: Ubuntu-20.04
-    if: github.event_name == 'issues' && github.event.action == 'Unlabeled'
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'issues' && github.event.action == 'unlabeled'
     steps:
-      - name: Unlabeled # condition 1
-        if: github.event.label.name == 'Unlabeled'
+      - name: unlabeled # condition 1
+        if: ${{ github.event.label.name == 'unlabeled' }}
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           # gh_token: ${{ env.gh_project_token }}
@@ -239,4 +238,4 @@ jobs:
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.un_labeled }}
 
-#------------------------------------------------------------------#
+# #------------------------------------------------------------------#
