@@ -1,6 +1,6 @@
 #================================= project name & types =================================#
 name: issues workflow
-run-name: ${{ github.actor }} has ignited github actions ${{ github.workflow }}
+run-name: ${{ github.actor }} has ignited issues workflow
 on:
   issues:
     types: [opened, closed, labeled, unlabeled, assigned, unassigned]
@@ -61,19 +61,10 @@ env:
 jobs:
   issue_opened: # issue opened
     name: issue_opened_or_reopened
-    runs-on: Ubuntu-20.04
-    env:
-      ID_Name: issue opened or reopened
     if: github.event_name == 'issues' && github.event.action == 'opened'
+    runs-on: Ubuntu-20.04
     steps:
-      - name: Move issue to ${{ env.backlog }} # step 1 # change name to print
-
-        run: |
-          echo "The id of this job is: $ID_Name"
-          echo "The id of this action is: ${{ github.workflow }}"
-          echo "Issue is assigned to Backlog 📜 status value inside the projects board"
-
-      - name: Trying out if this works
+      - name: Move issue to ${{ env.backlog }} # step 1 
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           # gh_token: ${{ env.gh_project_token }}
@@ -86,9 +77,9 @@ jobs:
           # add-labels: 
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.backlog }}
-
       - name: If unlabeled, adds {{ env.unlabeled }} label # step 2
         uses: andymckay/labeler@master
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
@@ -104,6 +95,7 @@ jobs:
 
       - name: If unassigned, adds {{ env.unassigned }} label # step 3
         uses: andymckay/labeler@master
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
@@ -119,6 +111,7 @@ jobs:
 
       - name: If an issue is reopened, adds ${{ env.backlog }} and removes ${{ env.done }} labels # step 4
         uses: andymckay/labeler@master
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
