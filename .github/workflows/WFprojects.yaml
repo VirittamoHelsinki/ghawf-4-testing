@@ -249,7 +249,7 @@ jobs:
 
   pr_opened_reopened:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'reopened' }}
+    if: ${{ github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'reopened') }}
     steps:
       - name: move PR to ${{ env.in_progress }}  # step 1
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
