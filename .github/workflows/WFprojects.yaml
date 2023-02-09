@@ -1,9 +1,11 @@
 #================================= project name & types =================================#
-name: issues workflow
+name: issues and pull request workflow automation
 run-name: ${{ github.actor }} has ignited ${{ github.workflow }}
 on:
   issues:
-    types: [opened, closed, labeled, unlabeled, assigned, unassigned]
+    types: [opened, reopened, closed, labeled, unlabeled, assigned, unassigned]
+  pull_request:
+    types: [opened, reopened, closed, labeled, unlabeled, review_requested, unassigned]
 
 #========================================================================#
 
@@ -54,12 +56,14 @@ env:
 
 #==================================================================#
 
-#--------------------------------- ISSUE is OPENED ---------------------------------#
+#================================= Issues =================================#
+
+#--------------------------------- ISSUE is OPENED || REOPENED ---------------------------------#
 
 jobs:
   issue_opened: # issue opened
     name: issue_opened_or_reopened
-    if: ${{ github.event_name == 'issues' && github.event.action == 'opened' }}
+    if: ${{ github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'reopened') }}
     runs-on: ubuntu-latest
     steps:
       - name: Move issue to ${{ env.backlog }} # step 1 
@@ -81,13 +85,13 @@ jobs:
         with:
           # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
-          gh_app_secret_key: ${{ env.gh_app_key }}
-          gh_app_ID: ${{ env.gh_app_id }}
-          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organization: ${{ env.organization_name }}
-          project_id: ${{ env.project_number }}
-          resource_node_id: ${{ github.event.issue.node_id }}
-          status_value: ${{ env.un_labeled }}
+          # gh_app_secret_key: ${{ env.gh_app_key }}
+          # gh_app_ID: ${{ env.gh_app_id }}
+          # gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          # organization: ${{ env.organization_name }}
+          # project_id: ${{ env.project_number }}
+          # resource_node_id: ${{ github.event.issue.node_id }}
+          # status_value: ${{ env.un_labeled }}
           add-labels: ${{ env.unlabeled }}
           ignore-if-labeled: true
 
@@ -96,13 +100,13 @@ jobs:
         with:
           # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
-          gh_app_secret_key: ${{ env.gh_app_key }}
-          gh_app_ID: ${{ env.gh_app_id }}
-          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organization: ${{ env.organization_name }}
-          project_id: ${{ env.project_number }}
-          resource_node_id: ${{ github.event.issue.node_id }}
-          status_value: ${{ env.un_assigned }}
+          # gh_app_secret_key: ${{ env.gh_app_key }}
+          # gh_app_ID: ${{ env.gh_app_id }}
+          # gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          # organization: ${{ env.organization_name }}
+          # project_id: ${{ env.project_number }}
+          # resource_node_id: ${{ github.event.issue.node_id }}
+          # status_value: ${{ env.un_assigned }}
           add-labels: ${{ env.unassigned }}
           ignore-if-assigned: true
 
@@ -111,13 +115,13 @@ jobs:
         with:
           # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
-          gh_app_secret_key: ${{ env.gh_app_key }}
-          gh_app_ID: ${{ env.gh_app_id }}
-          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organization: ${{ env.organization_name }}
-          project_id: ${{ env.project_number }}
-          resource_node_id: ${{ github.event.issue.node_id }}
-          status_value: ${{ env.backlog }}
+          # gh_app_secret_key: ${{ env.gh_app_key }}
+          # gh_app_ID: ${{ env.gh_app_id }}
+          # gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          # organization: ${{ env.organization_name }}
+          # project_id: ${{ env.project_number }}
+          # resource_node_id: ${{ github.event.issue.node_id }}
+          # status_value: ${{ env.backlog }}
           add-labels: ${{ env.backlog }}
           remove-labels: ${{ env.done }}
 #------------------------------------------------------------------#
@@ -154,15 +158,15 @@ jobs:
         with:
           # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
-          gh_app_secret_key: ${{ env.gh_app_key }}
-          gh_app_ID: ${{ env.gh_app_id }}
-          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organization: ${{ env.organization_name }}
-          project_id: ${{ env.project_number }}
-          resource_node_id: ${{ github.event.issue.node_id }}
-          status_value: ${{ env.done }}
+          # gh_app_secret_key: ${{ env.gh_app_key }}
+          # gh_app_ID: ${{ env.gh_app_id }}
+          # gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          # organization: ${{ env.organization_name }}
+          # project_id: ${{ env.project_number }}
+          # resource_node_id: ${{ github.event.issue.node_id }}
+          # status_value: ${{ env.done }}
           add-labels: ${{ env.done }}
-          remove-labels: ${{ env.backlog }}, ${{ env.in_progress }}, ${{ env.ready_for_review }}  
+          remove-labels: ${{ env.backlog }}, ${{ env.in_progress }}, ${{ env.ready_for_review }} 
 
 #------------------------------------------------------------------#
 
@@ -215,7 +219,7 @@ jobs:
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.done }}
 
-# #--------------------------------- when ISSUE is UNLABELED ---------------------------------#
+#--------------------------------- when ISSUE is UNLABELED ---------------------------------#
 
   issues_unlabeled:
     runs-on: ubuntu-latest
@@ -235,4 +239,84 @@ jobs:
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.un_labeled }}
 
-# #------------------------------------------------------------------#
+#------------------------------------------------------------------#
+
+#========================================================================#
+
+#================================= Pull Request (PR) =================================#
+
+#--------------------------------- PR is OPENED || REOPENED ---------------------------------#
+
+  pr_opened_reopened:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'reopened' }}
+    steps:
+      - name: move PR to ${{ env.in_progress }}  # step 1
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
+        with:
+          gh_app_secret_key: ${{ env.gh_app_key }}
+          gh_app_ID: ${{ env.gh_app_id }}
+          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          organization: ${{ env.organization_name }}
+          project_id: ${{ env.project_number }}
+          resource_node_id: ${{ github.event.issue.node_id }}
+          status_value: ${{ env.in_progress }}
+      - name: adds label ${{ env.in_progress }} and remove labels ${{ env.done }} ${{ env.ready_for_review }} ${{ env.backlog }}   # step 2
+        uses: andymckay/labeler@master
+        with:
+          add-labels: ${{ env.in_progress }}
+          remove-labels: ${{ env.done }}, ${{ env.ready_for_review }}, ${{ env.backlog }}
+          ignore-if-assigned: true
+      - name: If unassigned, adds {{ env.unassigned }} label # step 3
+        uses: andymckay/labeler@master
+        with:
+          # gh_token: ${{ env.gh_project_token }}
+          # user: ${{ env.username }}
+          # gh_app_secret_key: ${{ env.gh_app_key }}
+          # gh_app_ID: ${{ env.gh_app_id }}
+          # gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          # organization: ${{ env.organization_name }}
+          # project_id: ${{ env.project_number }}
+          # resource_node_id: ${{ github.event.issue.node_id }}
+          # status_value: ${{ env.un_assigned }}
+          add-labels: ${{ env.unassigned }}
+          ignore-if-assigned: true
+      - name: If PR is reopened, adds ${{ env.in_progress }} and removes ${{ env.done }} labels # step 4
+        uses: andymckay/labeler@master
+        with:
+          # gh_token: ${{ env.gh_project_token }}
+          # user: ${{ env.username }}
+          # gh_app_secret_key: ${{ env.gh_app_key }}
+          # gh_app_ID: ${{ env.gh_app_id }}
+          # gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          # organization: ${{ env.organization_name }}
+          # project_id: ${{ env.project_number }}
+          # resource_node_id: ${{ github.event.issue.node_id }}
+          # status_value: ${{ env.backlog }}
+          add-labels: ${{ env.in_progress }}
+          remove-labels: ${{ env.done }}
+
+#------------------------------------------------------------------#
+
+#--------------------------------- PR is REVIEW REQUESTED ---------------------------------#
+
+
+#------------------------------------------------------------------#
+
+#--------------------------------- PR is CLOSED ---------------------------------#
+
+#------------------------------------------------------------------#
+
+#--------------------------------- PR is LABELED ---------------------------------#
+
+#------------------------------------------------------------------#
+
+#--------------------------------- PR is UNLABELED ---------------------------------#
+
+#------------------------------------------------------------------#
+
+#--------------------------------- PR is UNASSIGNED ---------------------------------#
+
+#------------------------------------------------------------------#
+
+#========================================================================#
