@@ -66,7 +66,7 @@ jobs:
     if: ${{ github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'reopened') }}
     runs-on: ubuntu-latest
     steps:
-      - name: Move issue to ${{ env.backlog }} # step 1 
+      - name: moves status value to ${{ env.backlog }} # step 1 
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           gh_app_secret_key: ${{ env.gh_app_key }}
@@ -89,7 +89,7 @@ jobs:
           add-labels: ${{ env.unassigned }}
           ignore-if-assigned: true
 
-      - name: If an issue is reopened, adds ${{ env.backlog }} and removes ${{ env.done }} labels # step 4
+      - name: If reopened, adds ${{ env.backlog }} label and removes ${{ env.done }} label # step 4
         uses: LeDuble/labeler@master
         with:
           add-labels: ${{ env.backlog }}
@@ -110,7 +110,7 @@ jobs:
           echo "The id of this action is: $GITHUB_ACTION"
           echo "Issue is assigned to ${{ env.done }} status value inside the projects board"
 
-      - name: If closed, move issue to ${{ env.done }} # step 1
+      - name: If closed, moves status value to ${{ env.done }} # step 1
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           gh_app_secret_key: ${{ env.gh_app_key }}
@@ -120,7 +120,7 @@ jobs:
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.done }}
-      - name: If closed, adds ${{ env.done }} label # step 2
+      - name: If closed, adds ${{ env.done }} label and removes ${{ env.backlog }}, ${{ env.in_progress }}, ${{ env.ready_for_review }} labels # step 2
         uses: LeDuble/labeler@master
         with:
           add-labels: ${{ env.done }}
@@ -135,8 +135,8 @@ jobs:
     if: ${{ github.event_name == 'issues' && (github.event.action == 'assigned' || github.event.action == 'unassigned') }}
     runs-on: ubuntu-latest
     steps:
-      - name: if assigned, move issue to ${{ env.backlog }} # condition 1
-        if: ${{ github.event.action == 'assigned' }}
+      - name: if assigned, moves status value to ${{ env.backlog }} # condition 1.1
+        if: ${{ github.event.action == 'assigned' }} # label with name: status/backlog
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           gh_app_secret_key: ${{ env.gh_app_key }}
@@ -146,15 +146,15 @@ jobs:
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.backlog }}         
-      - name: If assigned, adds ${{ env.backlog }} label # condition 1
+      - name: If assigned, adds ${{ env.backlog }} label and removes ${{ env.unassigned }} label # condition 1.2
         if: ${{ github.event.action == 'assigned' }}
         uses: LeDuble/labeler@master
         with:
           add-labels: ${{ env.backlog }}
           remove-labels: ${{ env.unassigned }}
 
-      - name: if unassigned, move issue to ${{ env.unassigned }} # condition 2
-        if: ${{ github.event.action == 'unassigned' }}
+      - name: if unassigned, moves status value to ${{ env.unassigned }} # condition 2.1
+        if: ${{ github.event.action == 'unassigned' }} # label with name: status/unassigned
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           gh_app_secret_key: ${{ env.gh_app_key }}
@@ -164,7 +164,7 @@ jobs:
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.unassigned }}     
-      - name: If unassigned, adds ${{ env.unassigned }} label # condition 2
+      - name: If unassigned, adds ${{ env.unassigned }} label and removes ${{ env.backlog }} label # condition 2.2
         uses: LeDuble/labeler@master
         with:
           add-labels: ${{ env.unassigned }}
@@ -231,16 +231,15 @@ jobs:
 
 #--------------------------------- when ISSUE is UNLABELED ---------------------------------#
 
+# placeholder for now, might not needed
   issues_unlabeled:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'issues' && github.event.action == 'unlabeled' }}
     steps:
-      - name: unlabeled # condition 1
-        if: ${{ github.event.label.name == '${{ env.unlabeled }}' }}
+      - name: moves status value to ${{ env.unlabeled }} # condition 1
+        if: ${{ github.event.label.name == 'Unlabeled ❗' }}
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          # gh_token: ${{ env.gh_project_token }}
-          # user: ${{ env.username }}
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
