@@ -193,7 +193,6 @@ jobs:
         with:
           add-labels: ${{ env.backlog }}
           remove-labels: ${{ env.unassigned }}
-          ignore-if-assigned: false
 
       - name: if unassigned, move issue to ${{ env.unassigned }} # condition 2
         if: ${{ github.event.action == 'unassigned' }}
