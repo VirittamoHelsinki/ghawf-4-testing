@@ -188,7 +188,8 @@ jobs:
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.backlog }}         
-      - name: If assigned, adds {{ env.backlog }} label # condition 1
+      - name: If assigned, adds ${{ env.backlog }} label # condition 1
+        if: ${{ github.event.action == 'assigned' }}
         uses: andymckay/labeler@master
         with:
           add-labels: ${{ env.backlog }}
@@ -205,7 +206,7 @@ jobs:
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.unassigned }}     
-      - name: If unassigned, adds {{ env.unassigned }} label # condition 2
+      - name: If unassigned, adds ${{ env.unassigned }} label # condition 2
         uses: andymckay/labeler@master
         with:
           add-labels: ${{ env.unassigned }}
