@@ -222,7 +222,7 @@ jobs:
           organization: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
-          status_value: ${{ env.done }}
+          status_value: ${{ env.backlog }}
       - name: ${{ env.done }} label # condition 3.2
         if: ${{ github.event.label.name == 'Backlog 📜' }}
         uses: LeDuble/labeler@master
