@@ -51,7 +51,7 @@ env:
 
   # ----------------- apps/handles for github actions (ignore for now) ----------------- #
 
-  andymckay: andymckay/labeler@master # quick copy-pasta: ${{ env.andymckay }}
+  leduble: LeDuble/labeler@master # quick copy-pasta: ${{ env.andymckay }}
   leonsteinhaeuser: leonsteinhaeuser/project-beta-automations@v2.0.1 # quick copy-pasta: ${{ env.leonsteinhaeuser }}
 
 #==================================================================#
@@ -81,7 +81,7 @@ jobs:
           status_value: ${{ env.backlog }}
           
       - name: If unlabeled, adds {{ env.unlabeled }} label # step 2
-        uses: andymckay/labeler@master
+        uses: LeDuble/labeler@master
         with:
           # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
@@ -96,7 +96,7 @@ jobs:
           ignore-if-labeled: true
 
       - name: If unassigned, adds {{ env.unassigned }} label # step 3
-        uses: andymckay/labeler@master
+        uses: LeDuble/labeler@master
         with:
           # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
@@ -111,7 +111,7 @@ jobs:
           ignore-if-assigned: true
 
       - name: If an issue is reopened, adds ${{ env.backlog }} and removes ${{ env.done }} labels # step 4
-        uses: andymckay/labeler@master
+        uses: LeDuble/labeler@master
         with:
           # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
@@ -140,11 +140,9 @@ jobs:
           echo "The id of this action is: $GITHUB_ACTION"
           echo "Issue is assigned to ${{ env.done }} status value inside the projects board"
 
-      - name: If closed, moves the issue to done field in the projects board. # step 1
+      - name: If closed, move issue to ${{ env.done }} # step 1
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          # gh_token: ${{ secrets.USE_THIS}}
-          # user: ${{ env.username }}
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
@@ -152,21 +150,11 @@ jobs:
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.done }}
-
-      - name: Adds "done" label to a closed issue # step 2
-        uses: andymckay/labeler@master
+      - name: If closed, adds ${{ env.done }} label # step 2
+        uses: LeDuble/labeler@master
         with:
-          # gh_token: ${{ env.gh_project_token }}
-          # user: ${{ env.username }}
-          # gh_app_secret_key: ${{ env.gh_app_key }}
-          # gh_app_ID: ${{ env.gh_app_id }}
-          # gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          # organization: ${{ env.organization_name }}
-          # project_id: ${{ env.project_number }}
-          # resource_node_id: ${{ github.event.issue.node_id }}
-          # status_value: ${{ env.done }}
           add-labels: ${{ env.done }}
-          remove-labels: ${{ env.backlog }}, ${{ env.in_progress }}, ${{ env.ready_for_review }} 
+          remove-labels: ${{ env.backlog }}, ${{ env.in_progress }}, ${{ env.ready_for_review }}
 
 #------------------------------------------------------------------#
 
@@ -190,7 +178,7 @@ jobs:
           status_value: ${{ env.backlog }}         
       - name: If assigned, adds ${{ env.backlog }} label # condition 1
         if: ${{ github.event.action == 'assigned' }}
-        uses: andymckay/labeler@master
+        uses: LeDuble/labeler@master
         with:
           add-labels: ${{ env.backlog }}
           remove-labels: ${{ env.unassigned }}
@@ -207,7 +195,7 @@ jobs:
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.unassigned }}     
       - name: If unassigned, adds ${{ env.unassigned }} label # condition 2
-        uses: andymckay/labeler@master
+        uses: LeDuble/labeler@master
         with:
           add-labels: ${{ env.unassigned }}
           remove-labels: ${{ env.backlog }}
@@ -305,13 +293,13 @@ jobs:
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.in_progress }}
       - name: adds label ${{ env.in_progress }} and remove labels ${{ env.done }} ${{ env.ready_for_review }} ${{ env.backlog }}   # step 2
-        uses: andymckay/labeler@master
+        uses: LeDuble/labeler@master
         with:
           add-labels: ${{ env.in_progress }}
           remove-labels: ${{ env.done }}, ${{ env.ready_for_review }}, ${{ env.backlog }}
           ignore-if-assigned: true
       - name: If unassigned, adds {{ env.unassigned }} label # step 3
-        uses: andymckay/labeler@master
+        uses: LeDuble/labeler@master
         with:
           # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
@@ -325,7 +313,7 @@ jobs:
           add-labels: ${{ env.unassigned }}
           ignore-if-assigned: true
       - name: If PR is reopened, adds ${{ env.in_progress }} and removes ${{ env.done }} labels # step 4
-        uses: andymckay/labeler@master
+        uses: LeDuble/labeler@master
         with:
           # gh_token: ${{ env.gh_project_token }}
           # user: ${{ env.username }}
