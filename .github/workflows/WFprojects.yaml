@@ -69,59 +69,29 @@ jobs:
       - name: Move issue to ${{ env.backlog }} # step 1 
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          # gh_token: ${{ env.gh_project_token }}
-          # user: ${{ env.username }}
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
           organization: ${{ env.organization_name }}
           project_id: ${{ env.project_number }}
-          # add-labels: 
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.backlog }}
           
       - name: If unlabeled, adds {{ env.unlabeled }} label # step 2
         uses: LeDuble/labeler@master
         with:
-          # gh_token: ${{ env.gh_project_token }}
-          # user: ${{ env.username }}
-          # gh_app_secret_key: ${{ env.gh_app_key }}
-          # gh_app_ID: ${{ env.gh_app_id }}
-          # gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          # organization: ${{ env.organization_name }}
-          # project_id: ${{ env.project_number }}
-          # resource_node_id: ${{ github.event.issue.node_id }}
-          # status_value: ${{ env.un_labeled }}
           add-labels: ${{ env.unlabeled }}
           ignore-if-labeled: true
 
       - name: If unassigned, adds {{ env.unassigned }} label # step 3
         uses: LeDuble/labeler@master
         with:
-          # gh_token: ${{ env.gh_project_token }}
-          # user: ${{ env.username }}
-          # gh_app_secret_key: ${{ env.gh_app_key }}
-          # gh_app_ID: ${{ env.gh_app_id }}
-          # gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          # organization: ${{ env.organization_name }}
-          # project_id: ${{ env.project_number }}
-          # resource_node_id: ${{ github.event.issue.node_id }}
-          # status_value: ${{ env.un_assigned }}
           add-labels: ${{ env.unassigned }}
           ignore-if-assigned: true
 
       - name: If an issue is reopened, adds ${{ env.backlog }} and removes ${{ env.done }} labels # step 4
         uses: LeDuble/labeler@master
         with:
-          # gh_token: ${{ env.gh_project_token }}
-          # user: ${{ env.username }}
-          # gh_app_secret_key: ${{ env.gh_app_key }}
-          # gh_app_ID: ${{ env.gh_app_id }}
-          # gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          # organization: ${{ env.organization_name }}
-          # project_id: ${{ env.project_number }}
-          # resource_node_id: ${{ github.event.issue.node_id }}
-          # status_value: ${{ env.backlog }}
           add-labels: ${{ env.backlog }}
           remove-labels: ${{ env.done }}
 #------------------------------------------------------------------#
@@ -208,12 +178,10 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'issues' && github.event.action == 'labeled' }}
     steps:
-      - name: In Progress # condition 1
+      - name: In Progress # condition 1.1
         if: ${{ github.event.label.name == '${{ env.in_progress }}' }} # label with name: status/in-progress
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          # gh_token: ${{ env.gh_project_token }}
-          # user: ${{ env.username }}
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
@@ -221,27 +189,16 @@ jobs:
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.in_progress }}
-      
-      - name: Review Requested # condition 2
-        if: ${{ github.event.label.name == '${{ env.ready_for_review }}' }} # label with name: status/review-requested
-        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
+      - name: ${{ env.in_progress }} label # condition 1.2
+        if: ${{ github.event.label.name == '${{ env.in_progress }}' }}
+        uses: LeDuble/labeler@master
         with:
-          # gh_token: ${{ env.gh_project_token }}
-          # user: ${{ env.username }}
-          gh_app_secret_key: ${{ env.gh_app_key }}
-          gh_app_ID: ${{ env.gh_app_id }}
-          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
-          organization: ${{ env.organization_name }}
-          project_id: ${{ env.project_number }}
-          resource_node_id: ${{ github.event.issue.node_id }}
-          status_value: ${{ env.ready_for_review }}
-
-      - name: Done # condition 3
+          remove-labels: ${{ env.done }}, ${{ env.backlog }}, ${{ env.ready_for_review }}
+      
+      - name: Done # condition 2.1
         if: ${{ github.event.label.name == '${{ env.done }}' }} # label with name: status/done
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
-          # gh_token: ${{ env.gh_project_token }}
-          # user: ${{ env.username }}
           gh_app_secret_key: ${{ env.gh_app_key }}
           gh_app_ID: ${{ env.gh_app_id }}
           gh_app_installation_ID: ${{ env.gh_app_installation_id }}
@@ -249,6 +206,28 @@ jobs:
           project_id: ${{ env.project_number }}
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.done }}
+      - name: ${{ env.done }} label # condition 2.2
+        if: ${{ github.event.label.name == '${{ env.done }}' }}
+        uses: LeDuble/labeler@master
+        with:
+          remove-labels: ${{ env.in_progress }}, ${{ env.backlog }}, ${{ env.ready_for_review }}
+
+      - name: Backlog # condition 3.1
+        if: ${{ github.event.label.name == '${{ env.backlog }}' }} # label with name: status/backlog
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
+        with:
+          gh_app_secret_key: ${{ env.gh_app_key }}
+          gh_app_ID: ${{ env.gh_app_id }}
+          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          organization: ${{ env.organization_name }}
+          project_id: ${{ env.project_number }}
+          resource_node_id: ${{ github.event.issue.node_id }}
+          status_value: ${{ env.done }}
+      - name: ${{ env.done }} label # condition 3.2
+        if: ${{ github.event.label.name == '${{ env.backlog }}' }}
+        uses: LeDuble/labeler@master
+        with:
+          remove-labels: ${{ env.in_progress }}, ${{ env.done }}, ${{ env.ready_for_review }}
 
 #--------------------------------- when ISSUE is UNLABELED ---------------------------------#
 
@@ -257,7 +236,7 @@ jobs:
     if: ${{ github.event_name == 'issues' && github.event.action == 'unlabeled' }}
     steps:
       - name: unlabeled # condition 1
-        if: ${{ github.event.label.name == 'unlabeled' }}
+        if: ${{ github.event.label.name == '${{ env.unlabeled }}' }}
         uses: leonsteinhaeuser/project-beta-automations@v2.0.1
         with:
           # gh_token: ${{ env.gh_project_token }}
