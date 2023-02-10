@@ -61,7 +61,7 @@ env:
 #--------------------------------- ISSUE is OPENED || REOPENED ---------------------------------#
 
 jobs:
-  issue_opened: # issue opened
+  issue_opened: # issue opened or reopened
     name: issue_opened_or_reopened
     if: ${{ github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'reopened') }}
     runs-on: ubuntu-latest
@@ -169,6 +169,49 @@ jobs:
           remove-labels: ${{ env.backlog }}, ${{ env.in_progress }}, ${{ env.ready_for_review }} 
 
 #------------------------------------------------------------------#
+
+#--------------------------------- ISSUE is ASSIGNED || UNASSIGNED ---------------------------------#
+
+  issue_assigned: # issue assigned or unassigned
+    name: issue_assigned_unassigned
+    if: ${{ github.event_name == 'issues' && (github.event.action == 'assigned' || github.event.action == 'unassigned') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: if assigned, move issue to ${{ env.backlog }} # condition 1
+        if: ${{ github.event.action == 'assigned' }}
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
+        with:
+          gh_app_secret_key: ${{ env.gh_app_key }}
+          gh_app_ID: ${{ env.gh_app_id }}
+          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          organization: ${{ env.organization_name }}
+          project_id: ${{ env.project_number }}
+          resource_node_id: ${{ github.event.issue.node_id }}
+          status_value: ${{ env.backlog }}         
+      - name: If assigned, adds {{ env.backlog }} label # condition 1
+        uses: andymckay/labeler@master
+        with:
+          add-labels: ${{ env.backlog }}
+          remove-labels: ${{ env.unassigned }}
+          ignore-if-assigned: false
+
+      - name: if unassigned, move issue to ${{ env.unassigned }} # condition 2
+        if: ${{ github.event.action == 'unassigned' }}
+        uses: leonsteinhaeuser/project-beta-automations@v2.0.1
+        with:
+          gh_app_secret_key: ${{ env.gh_app_key }}
+          gh_app_ID: ${{ env.gh_app_id }}
+          gh_app_installation_ID: ${{ env.gh_app_installation_id }}
+          organization: ${{ env.organization_name }}
+          project_id: ${{ env.project_number }}
+          resource_node_id: ${{ github.event.issue.node_id }}
+          status_value: ${{ env.unassigned }}     
+      - name: If unassigned, adds {{ env.unassigned }} label # condition 2
+        uses: andymckay/labeler@master
+        with:
+          add-labels: ${{ env.unassigned }}
+          remove-labels: ${{ env.backlog }}
+          ignore-if-assigned: true
 
 #--------------------------------- when ISSUE is LABELED ---------------------------------#
 
